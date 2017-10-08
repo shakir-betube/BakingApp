@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--<style name="AppTheme.Headline.Inverse" parent="TextAppearance.AppCompat.Headline">-->
+        <!--<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>-->
+    <!--</style>-->
+
+
 </resources>
