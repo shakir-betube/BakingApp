@@ -10,8 +10,8 @@ public class Recipe implements Parcelable {
 
     private Integer mId;
     private String mTitle;
-    private List<Ingredient> mIngredients = null;
-    private List<Step> mSteps = null;
+    private ArrayList<Ingredient> mIngredients = null;
+    private ArrayList<Step> mSteps = null;
     private Integer mServings;
     private String mImage;
 
@@ -33,19 +33,19 @@ public class Recipe implements Parcelable {
         this.mTitle = title;
     }
 
-    public List<Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return mIngredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.mIngredients = ingredients;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Step> getSteps() {
         return mSteps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.mSteps = steps;
     }
 

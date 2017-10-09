@@ -4,13 +4,14 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipes_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recipes_list"/>
+        android:layout_height="wrap_content" />
+
     <ProgressBar
+        android:id="@+id/recipes_progress"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:id="@+id/recipes_progress"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </merge>

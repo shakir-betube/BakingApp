@@ -1,17 +1,17 @@
 package com.appsys.bakingapp.adapter;
 
-import android.os.Binder;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.appsys.bakingapp.DetailActivity;
 import com.appsys.bakingapp.R;
 import com.appsys.bakingapp.modal.Recipe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         return (mList==null) ? 0 : mList.size();
     }
 
-    class RecipeHolder extends RecyclerView.ViewHolder {
+    class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.recipe_item_title)
         TextView mTitle;
 
@@ -58,11 +58,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         public RecipeHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         void bind(String title, int server) {
             mTitle.setText(title);
             mServing.setText(String.valueOf(server));
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Recipe r = mList.get(position);
+            Intent i  = new Intent(itemView.getContext(), DetailActivity.class);
+            i.putExtra("recipe", r);
+            itemView.getContext().startActivity(i);
         }
     }
 }

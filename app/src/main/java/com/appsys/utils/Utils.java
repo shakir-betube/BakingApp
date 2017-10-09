@@ -1,8 +1,13 @@
 package com.appsys.utils;
 
+import android.content.Context;
+import android.support.v4.app.INotificationSideChannel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,6 +26,23 @@ public class Utils {
 
     public JSONArray getRecipes() throws ApiException, InternetException {
         return getResponse(sBaseUrl + sRecipePath);
+    }
+
+    public JSONArray getRecipes(Context c) throws ApiException, InternetException {
+        InputStream fos = null;
+        String response = "";
+        try {
+            fos = c.getAssets().open("recipe.json");
+            byte[] bytes = new byte[fos.available()];
+            fos.read(bytes);
+            fos.close();
+            response = new String(bytes);
+            return new JSONArray(response);
+        } catch (IOException e) {
+            throw new InternetException(e);
+        } catch (JSONException e) {
+            throw new JSONParsingException("Api response is not json: " + e.getMessage(), response);
+        }
     }
 
     private JSONArray getResponse(String strUrl) throws ApiException, InternetException {
