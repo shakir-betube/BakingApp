@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.appsys.bakingapp.fragment.IngredientsFragment;
+import com.appsys.bakingapp.fragment.StepFragment;
 import com.appsys.bakingapp.fragment.StepsFragment;
 import com.appsys.bakingapp.modal.Ingredient;
 import com.appsys.bakingapp.modal.Recipe;
@@ -76,7 +77,7 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
             if (fm.getBackStackEntryCount() > 1) {
                 fm.popBackStack(STACK_RECIPE_DETAIL, 0);
             } else {
-                super.onBackPressed();
+                finish();
             }
         } else {
             super.onBackPressed();
@@ -94,6 +95,10 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
 
     @Override
     public void onStepClick(List<Step> list, int position) {
-
+        StepFragment stepsFragment = StepFragment.newInstance(mRecipe.getSteps(), position);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.master_list_fragment, stepsFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
+                .commit();
     }
 }

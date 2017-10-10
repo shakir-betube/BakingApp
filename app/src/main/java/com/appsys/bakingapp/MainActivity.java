@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 while (tryNo++ < 3) {
                     try {
                         Utils u = new Utils();
+//                        JSONArray response = u.getRecipes();
                         JSONArray response = u.getRecipes(MainActivity.this);
                         int recipesCount = response.length();
                         ArrayList<Recipe> recipes = new ArrayList<>();
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                             ArrayList<Ingredient> ingredients = new ArrayList<>();
 
                             for (int j = 0; j < ingredientsCount; j++) {
-                                JSONObject jsonIngredient = jsonIngredients.getJSONObject(i);
+                                JSONObject jsonIngredient = jsonIngredients.getJSONObject(j);
                                 Ingredient ingredient = new Ingredient();
                                 ingredient.setQuantity(jsonIngredient.getDouble("quantity"));
                                 ingredient.setIngredient(jsonIngredient.getString("ingredient"));
@@ -122,11 +123,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                             recipe.setIngredients(ingredients);
 
                             JSONArray jsonSteps = jsonRecipe.getJSONArray("steps");
-                            int stepsCount = jsonIngredients.length();
+                            int stepsCount = jsonSteps.length();
                             ArrayList<Step> steps = new ArrayList<>();
 
                             for (int j = 0; j < stepsCount; j++) {
-                                JSONObject jsonStep = jsonSteps.getJSONObject(i);
+                                JSONObject jsonStep = jsonSteps.getJSONObject(j);
                                 Step step = new Step();
                                 step.setId(jsonStep.getInt("id"));
                                 step.setDescription(jsonStep.getString("description"));
@@ -177,6 +178,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         outState.putParcelableArrayList("recipes", mRecipeAdapter.getList());
         super.onSaveInstanceState(outState);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.appsys.bakingapp.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,6 +33,17 @@ public class StepsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof StepsCallback) {
+            mCallback = (StepsCallback) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement StepsFragment.StepsCallback");
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -43,6 +55,11 @@ public class StepsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 
     public static StepsFragment newInstance(Recipe recipe) {
         StepsFragment fragment = new StepsFragment();
@@ -58,7 +75,34 @@ public class StepsFragment extends Fragment {
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(ARG_RECIPE_KEY);
         }
-        getView().findViewById(R.id.ingredients_of_recipe).setOnClickListener(new View.OnClickListener() {
+//        getView().findViewById(R.id.ingredients_of_recipe).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (mCallback == null)
+//                    return;
+//
+//                mCallback.onIngredientClick(mRecipe.getIngredients());
+//            }
+//        });
+//
+//        RecyclerView recyclerView = getView().findViewById(R.id.steps_of_recipe);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setAdapter(new StepsAdapter(mRecipe.getSteps(), new StepsAdapter.CallbackStepList() {
+//            @Override
+//            public void onClick(int position) {
+//                if (mCallback == null)
+//                    return;
+//
+//                mCallback.onStepClick(mRecipe.getSteps(), position);
+//            }
+//        }));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup itemView = (ViewGroup) inflater.inflate(R.layout.fragment_steps, container, false);
+        itemView.findViewById(R.id.ingredients_of_recipe).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mCallback == null)
@@ -68,7 +112,7 @@ public class StepsFragment extends Fragment {
             }
         });
 
-        RecyclerView recyclerView = getView().findViewById(R.id.steps_of_recipe);
+        RecyclerView recyclerView = itemView.findViewById(R.id.steps_of_recipe);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new StepsAdapter(mRecipe.getSteps(), new StepsAdapter.CallbackStepList() {
             @Override
@@ -79,12 +123,8 @@ public class StepsFragment extends Fragment {
                 mCallback.onStepClick(mRecipe.getSteps(), position);
             }
         }));
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_steps, container, false);
+        return itemView;
     }
 
     public interface StepsCallback{

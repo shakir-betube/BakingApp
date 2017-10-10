@@ -43,15 +43,18 @@ public class IngredientsFragment extends Fragment {
             mIngredients = getArguments().getParcelableArrayList(ARG_LIST_KEY);
         }
 
-        RecyclerView recyclerView = getView().findViewById(R.id.recipe_ingredient_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new IngredientAdapter(mIngredients));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.ingredient_list, container, false);
+        ViewGroup itemView = (ViewGroup) inflater.inflate(R.layout.ingredient_list, container, false);
+
+        RecyclerView recyclerView = itemView.findViewById(R.id.recipe_ingredient_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new IngredientAdapter(mIngredients));
+
+        return itemView;
     }
 
 }
