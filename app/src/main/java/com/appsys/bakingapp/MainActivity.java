@@ -1,10 +1,9 @@
 package com.appsys.bakingapp;
 
-import android.os.Bundle;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
-import android.os.PersistableBundle;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mRecipeList.setAdapter(mRecipeAdapter);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("recipes")){
+        if (savedInstanceState != null && savedInstanceState.containsKey("recipes")) {
             ArrayList<Recipe> recipes = savedInstanceState.getParcelableArrayList("recipes");
             mRecipeAdapter.swap(recipes);
         } else {
@@ -136,8 +134,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                                 step.setVideoURL(jsonStep.getString("videoURL"));
                                 steps.add(step);
                             }
-                            recipe.setSteps(steps);
 
+                            String imageThumb = "";
+                            for (int j = --stepsCount; j > 0; j--) {
+                                Step s = steps.get(j);
+                                if (!s.getVideoURL().isEmpty()) {
+                                    imageThumb = s.getVideoURL();
+                                }
+                                s.setThumbnailURL(imageThumb);
+                            }
+                            recipe.setSteps(steps);
+                            recipe.setImage(imageThumb);
                             recipes.add(recipe);
                         }
 
@@ -163,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecipeAdapter.swap(recipes);
         mProgressBar.setVisibility(View.GONE);
         getLoaderManager().destroyLoader(LOADER_ID);
-        if (recipes ==null || recipes.size() < 1) {
+        if (recipes == null || recipes.size() < 1) {
             showMessage(mErrorMessage);
         }
     }

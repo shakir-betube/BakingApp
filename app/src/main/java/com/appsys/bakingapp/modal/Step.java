@@ -5,61 +5,61 @@ import android.os.Parcelable;
 
 public class Step implements Parcelable {
 
-    private Integer id;
-    private String shortDescription;
-    private String description;
-    private String videoURL;
-    private String thumbnailURL;
+    private Integer mId;
+    private String mShortDescription;
+    private String mDescription;
+    private String mVideoURL;
+    private String mThumbnailURL;
 
     public Integer getId() {
-        return id;
+        return mId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getShortDescription() {
-        return shortDescription;
+        return mShortDescription;
     }
 
     public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
+        this.mShortDescription = shortDescription;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.mDescription = description;
     }
 
     public String getVideoURL() {
-        return videoURL;
+        return mVideoURL;
     }
 
     public void setVideoURL(String videoURL) {
-        this.videoURL = videoURL;
+        this.mVideoURL = videoURL;
     }
 
     public String getThumbnailURL() {
-        return thumbnailURL;
+        return mThumbnailURL;
     }
 
     public void setThumbnailURL(String thumbnailURL) {
-        this.thumbnailURL = thumbnailURL;
+        this.mThumbnailURL = thumbnailURL;
     }
 
     public Step() {
     }
 
     private Step(Parcel in) {
-        id = in.readByte() == 0x00 ? null : in.readInt();
-        shortDescription = in.readString();
-        description = in.readString();
-        videoURL = in.readString();
-        thumbnailURL = in.readString();
+        mId = in.readByte() == 0x00 ? null : in.readInt();
+        mShortDescription = in.readString();
+        mDescription = in.readString();
+        mVideoURL = in.readString();
+        mThumbnailURL = in.readString();
     }
 
     @Override
@@ -69,16 +69,16 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
+        if (mId == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeInt(id);
+            dest.writeInt(mId);
         }
-        dest.writeString(shortDescription);
-        dest.writeString(description);
-        dest.writeString(videoURL);
-        dest.writeString(thumbnailURL);
+        dest.writeString(mShortDescription);
+        dest.writeString(mDescription);
+        dest.writeString(mVideoURL);
+        dest.writeString(mThumbnailURL);
     }
 
     @SuppressWarnings("unused")

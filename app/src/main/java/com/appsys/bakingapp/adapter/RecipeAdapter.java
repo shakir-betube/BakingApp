@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appsys.bakingapp.DetailActivity;
 import com.appsys.bakingapp.R;
 import com.appsys.bakingapp.modal.Recipe;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -40,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     @Override
     public void onBindViewHolder(RecipeAdapter.RecipeHolder holder, int position) {
         Recipe r = mList.get(position);
-        holder.bind(r.getTitle(), r.getServings());
+        holder.bind(r.getTitle(), r.getServings(), r.getImage());
     }
 
     @Override
@@ -52,8 +54,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         @BindView(R.id.recipe_item_title)
         TextView mTitle;
 
+        @BindView(R.id.recipe_item_image)
+        ImageView mImage;
+
         @BindView(R.id.recipe_item_serving)
         TextView mServing;
+
 
         public RecipeHolder(View itemView) {
             super(itemView);
@@ -61,9 +67,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
             itemView.setOnClickListener(this);
         }
 
-        void bind(String title, int server) {
+        void bind(String title, int server, String image) {
             mTitle.setText(title);
             mServing.setText(String.valueOf(server));
+            Glide.with(itemView.getContext())
+                    .asBitmap()
+                    .load(image)
+                    .into(mImage);
         }
 
         @Override

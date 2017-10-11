@@ -1,7 +1,12 @@
 package com.appsys.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.INotificationSideChannel;
+
+import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +48,19 @@ public class Utils {
         } catch (JSONException e) {
             throw new JSONParsingException("Api response is not json: " + e.getMessage(), response);
         }
+    }
+
+    public static String getUserAgent(Context context, String applicationName) {
+        String versionName;
+        try {
+            String packageName = context.getPackageName();
+            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
+            versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            versionName = "?";
+        }
+        return applicationName + "/" + versionName + " (Linux;Android " + Build.VERSION.RELEASE
+                + ") " + "ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
     }
 
     private JSONArray getResponse(String strUrl) throws ApiException, InternetException {
