@@ -47,8 +47,7 @@ public class StepFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup itemView = (ViewGroup) inflater.inflate(R.layout.step_of_recipe, container, false);
         TextView textView = itemView.findViewById(R.id.recipe_description);
-        textView.setText(mCurrent +") " +mStep.get(mCurrent).getDescription());
+        textView.setText((mCurrent+1) +") " +mStep.get(mCurrent).getDescription());
         return itemView;
     }
-
 }
