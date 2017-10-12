@@ -1,15 +1,14 @@
 package com.appsys.bakingapp.fragment;
 
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Ingredient;
 import com.appsys.bakingapp.modal.Step;
 import com.appsys.utils.Utils;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -23,7 +22,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
@@ -64,7 +62,7 @@ public class StepFragment extends Fragment {
         ViewGroup itemView = (ViewGroup) inflater.inflate(R.layout.step_of_recipe, container, false);
         Step step = mStep.get(mCurrent);
         TextView textView = itemView.findViewById(R.id.recipe_description);
-        textView.setText((mCurrent+1) +") " +step.getDescription());
+        textView.setText((mCurrent + 1) + ") " + step.getDescription());
 
         mExoPlayerView = itemView.findViewById(R.id.player_view);
         if (step.getVideoURL().isEmpty()) {
@@ -75,8 +73,10 @@ public class StepFragment extends Fragment {
 
         return itemView;
     }
+
     /**
      * Initialize ExoPlayer.
+     *
      * @param mediaUri The URI of the sample to play.
      */
 
@@ -102,9 +102,11 @@ public class StepFragment extends Fragment {
      * Release ExoPlayer.
      */
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
