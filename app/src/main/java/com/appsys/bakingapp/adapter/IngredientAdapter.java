@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Ingredient;
+import com.appsys.bakingapp.model.Ingredient;
 
 import java.util.List;
 

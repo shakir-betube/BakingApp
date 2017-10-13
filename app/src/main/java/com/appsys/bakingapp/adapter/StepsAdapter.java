@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.model.Step;
 import com.bumptech.glide.Glide;
 
 import java.util.List;

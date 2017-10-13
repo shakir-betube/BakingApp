@@ -1,6 +1,5 @@
 package com.appsys.bakingapp;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
@@ -9,20 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.appsys.bakingapp.fragment.IngredientsFragment;
 import com.appsys.bakingapp.fragment.StepFragment;
 import com.appsys.bakingapp.fragment.StepsFragment;
-import com.appsys.bakingapp.modal.Ingredient;
-import com.appsys.bakingapp.modal.Recipe;
-import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.model.Ingredient;
+import com.appsys.bakingapp.model.Recipe;
+import com.appsys.bakingapp.model.Step;
 import com.appsys.bakingapp.widget.RecipeWidget;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements StepsFragment.StepsCallback {

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.model.Step;
 import com.appsys.utils.Utils;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;

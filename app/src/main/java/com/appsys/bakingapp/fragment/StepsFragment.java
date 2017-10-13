@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 
 import com.appsys.bakingapp.R;
 import com.appsys.bakingapp.adapter.StepsAdapter;
-import com.appsys.bakingapp.modal.Ingredient;
-import com.appsys.bakingapp.modal.Recipe;
-import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.model.Ingredient;
+import com.appsys.bakingapp.model.Recipe;
+import com.appsys.bakingapp.model.Step;
 
 import java.util.List;
 

@@ -13,9 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.appsys.bakingapp.adapter.RecipeAdapter;
-import com.appsys.bakingapp.modal.Ingredient;
-import com.appsys.bakingapp.modal.Recipe;
-import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.model.Ingredient;
+import com.appsys.bakingapp.model.Recipe;
+import com.appsys.bakingapp.model.Step;
 import com.appsys.utils.ApiException;
 import com.appsys.utils.InternetException;
 import com.appsys.utils.JSONParsingException;
@@ -169,7 +169,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected int computeNoOfColumns() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         float dpWidth = dm.widthPixels / dm.density;
-        return (int) (dpWidth / 600);
+        int result = (int) (dpWidth / 400);
+        if (result < 1) {
+            result = 1;
+        }
+        return result;
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.appsys.bakingapp.DetailActivity;
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Recipe;
+import com.appsys.bakingapp.model.Recipe;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

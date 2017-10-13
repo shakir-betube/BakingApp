@@ -1,4 +1,4 @@
-package com.appsys.bakingapp.modal;
+package com.appsys.bakingapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

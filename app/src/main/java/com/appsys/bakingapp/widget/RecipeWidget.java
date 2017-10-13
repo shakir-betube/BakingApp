@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
 
 import com.appsys.bakingapp.MainActivity;
 import com.appsys.bakingapp.R;
-import com.appsys.bakingapp.modal.Ingredient;
+import com.appsys.bakingapp.model.Ingredient;
 
 import java.util.ArrayList;
 
