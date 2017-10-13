@@ -5,8 +5,9 @@ import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -60,14 +61,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mRecipeList.setLayoutManager(new LinearLayoutManager(this));
+        mRecipeList.setLayoutManager(new GridLayoutManager(this, computeNoOfColumns()));
 
         mRecipeAdapter = new RecipeAdapter();
 
         mRecipeList.setAdapter(mRecipeAdapter);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("recipes")) {
-            ArrayList<Recipe> recipes = savedInstanceState.getParcelableArrayList("recipes");
+        if (savedInstanceState != null && savedInstanceState.containsKey(RECIPES)) {
+            ArrayList<Recipe> recipes = savedInstanceState.getParcelableArrayList(RECIPES);
             mRecipeAdapter.swap(recipes);
         } else {
             getLoaderManager().restartLoader(LOADER_ID, null, this);
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 while (tryNo++ < 3) {
                     try {
                         Utils u = new Utils();
-//                        JSONArray response = u.getRecipes();
-                        JSONArray response = u.getRecipes(MainActivity.this);
+                        JSONArray response = u.getRecipes();
+//                        JSONArray response = u.getRecipes(MainActivity.this);
                         int recipesCount = response.length();
                         ArrayList<Recipe> recipes = new ArrayList<>();
                         for (int i = 0; i < recipesCount; i++) {
@@ -165,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         };
     }
 
+    protected int computeNoOfColumns() {
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        float dpWidth = dm.widthPixels / dm.density;
+        return (int) (dpWidth / 600);
+    }
+
     @Override
     public void onLoadFinished(android.content.Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> recipes) {
         mRecipeAdapter.swap(recipes);
@@ -182,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("recipes", mRecipeAdapter.getList());
+        outState.putParcelableArrayList(RECIPES, mRecipeAdapter.getList());
         super.onSaveInstanceState(outState);
     }
 }

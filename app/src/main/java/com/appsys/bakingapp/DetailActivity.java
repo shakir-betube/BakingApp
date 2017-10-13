@@ -3,9 +3,12 @@ package com.appsys.bakingapp;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -15,6 +18,7 @@ import com.appsys.bakingapp.fragment.StepsFragment;
 import com.appsys.bakingapp.modal.Ingredient;
 import com.appsys.bakingapp.modal.Recipe;
 import com.appsys.bakingapp.modal.Step;
+import com.appsys.bakingapp.widget.RecipeWidget;
 
 import java.util.List;
 
@@ -128,6 +132,9 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
 
     @Override
     public void onIngredientClick(List<Ingredient> list) {
+        if (mCurrentIndex == -1)
+            return;
+
         mCurrentIndex = -1;
         FragmentManager fm = getFragmentManager();
         IngredientsFragment ingredientsFragment = IngredientsFragment.newInstance(mRecipe.getIngredients());
@@ -141,7 +148,30 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipe_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.add_widget:
+                // It is the responsibility of the configuration activity to update the app widget
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                RecipeWidget.updateAppWidget(this, appWidgetManager, RecipeWidget.APP_WIDGET_ID, mRecipe.getIngredients());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onStepClick(List<Step> list, int position) {
+        if (mCurrentIndex == position)
+            return;
+
         mCurrentIndex = position;
         FragmentManager fm = getFragmentManager();
         StepFragment stepsFragment = StepFragment.newInstance(mRecipe.getSteps(), position);
