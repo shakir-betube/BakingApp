@@ -4,6 +4,6 @@
     <item
         android:id="@+id/add_widget"
         android:orderInCategory="0"
-        android:title="Done"
-        app:showAsAction="ifRoom" />
+        android:title="@string/add_widget"
+        app:showAsAction="always" />
 </menu>

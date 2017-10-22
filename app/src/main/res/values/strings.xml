@@ -2,8 +2,10 @@
     <string name="app_name">Baking App</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
+    <string name="add_widget">Add to Widget</string>
+    <string name="serving_temp">16</string>
+    <string name="recipe_title">Recipe Title</string>
+    <string name="measurement_temp">cup</string>
+    <string name="quantity_temp">0</string>
+    <string name="ing_title_temp">milk</string>
 </resources>
