@@ -13,6 +13,8 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,6 +26,7 @@ public class Utils {
 
     private final static String sBaseUrl = "https://d17h27t6h515a5.cloudfront.net";
     private final static String sRecipePath = "/topher/2017/May/59121517_baking/baking.json";
+    public final static String SINGLE_RECIPE = "recipe.json";
 
     public Utils() {
 
@@ -101,6 +104,34 @@ public class Utils {
         } finally {
             if (urlConnection != null)
                 urlConnection.disconnect();
+        }
+    }
+
+    public static void writeStringFile(Context context, String filename, String strData) throws IOException {
+        FileOutputStream fileOutputStream = null;
+        byte[] bytes = strData.getBytes();
+        try {
+            fileOutputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            fileOutputStream.write(bytes);
+            fileOutputStream.flush();
+        } finally {
+            if (fileOutputStream != null)
+                fileOutputStream.close();
+        }
+    }
+
+    public static String readStringFile(Context context, String filename) throws IOException {
+        FileInputStream fileInputStream = null;
+        byte[] bytes = new byte[0];
+        try {
+            fileInputStream = context.openFileInput(filename);
+             bytes = new byte[fileInputStream.available()];
+            fileInputStream.read(bytes);
+            return new String(bytes);
+
+        } finally {
+            if (fileInputStream != null)
+                fileInputStream.close();
         }
     }
 }

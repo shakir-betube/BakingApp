@@ -4,14 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
+    <TextView android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/example_appwidget_preview"/>
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:id="@+id/widget_recipe_item_title"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:text="Recipe Name"/>
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recipe_ingredient_list"
-        android:background="#999"
+        android:background="#fff"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout><!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:id="@+id/map"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent" />-->
+</LinearLayout>

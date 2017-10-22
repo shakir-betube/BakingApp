@@ -13,9 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.appsys.bakingapp.adapter.RecipeAdapter;
-import com.appsys.bakingapp.model.Ingredient;
 import com.appsys.bakingapp.model.Recipe;
-import com.appsys.bakingapp.model.Step;
 import com.appsys.utils.ApiException;
 import com.appsys.utils.InternetException;
 import com.appsys.utils.JSONParsingException;
@@ -25,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -95,58 +95,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 while (tryNo++ < 3) {
                     try {
                         Utils u = new Utils();
-                        JSONArray response = u.getRecipes();
-//                        JSONArray response = u.getRecipes(MainActivity.this);
+//                        JSONArray response = u.getRecipes();
+                        JSONArray response = u.getRecipes(MainActivity.this);
                         int recipesCount = response.length();
                         ArrayList<Recipe> recipes = new ArrayList<>();
                         for (int i = 0; i < recipesCount; i++) {
                             JSONObject jsonRecipe = response.getJSONObject(i);
                             Recipe recipe = new Recipe();
-                            recipe.setId(jsonRecipe.getInt("id"));
-                            recipe.setTitle(jsonRecipe.getString("name"));
-                            recipe.setServings(jsonRecipe.getInt("servings"));
-                            recipe.setImage(jsonRecipe.getString("image"));
-
-                            JSONArray jsonIngredients = jsonRecipe.getJSONArray("ingredients");
-                            int ingredientsCount = jsonIngredients.length();
-                            ArrayList<Ingredient> ingredients = new ArrayList<>();
-
-                            for (int j = 0; j < ingredientsCount; j++) {
-                                JSONObject jsonIngredient = jsonIngredients.getJSONObject(j);
-                                Ingredient ingredient = new Ingredient();
-                                ingredient.setQuantity(jsonIngredient.getDouble("quantity"));
-                                ingredient.setIngredient(jsonIngredient.getString("ingredient"));
-                                ingredient.setMeasure(jsonIngredient.getString("measure"));
-                                ingredients.add(ingredient);
-                            }
-                            recipe.setIngredients(ingredients);
-
-                            JSONArray jsonSteps = jsonRecipe.getJSONArray("steps");
-                            int stepsCount = jsonSteps.length();
-                            ArrayList<Step> steps = new ArrayList<>();
-
-                            for (int j = 0; j < stepsCount; j++) {
-                                JSONObject jsonStep = jsonSteps.getJSONObject(j);
-                                Step step = new Step();
-                                step.setId(jsonStep.getInt("id"));
-                                step.setDescription(jsonStep.getString("description"));
-                                step.setShortDescription(jsonStep.getString("shortDescription"));
-                                step.setThumbnailURL(jsonStep.getString("thumbnailURL"));
-                                step.setVideoURL(jsonStep.getString("videoURL"));
-                                steps.add(step);
-                            }
-
-                            String imageThumb = "";
-                            for (int j = --stepsCount; j > 0; j--) {
-                                Step s = steps.get(j);
-                                if (!s.getVideoURL().isEmpty()) {
-                                    imageThumb = s.getVideoURL();
-                                }
-                                s.setThumbnailURL(imageThumb);
-                            }
-                            recipe.setSteps(steps);
-                            recipe.setImage(imageThumb);
+                            recipe.setByJSON(jsonRecipe);
                             recipes.add(recipe);
+                        }
+                        if (recipes.size() > 0 && !(new File(Utils.SINGLE_RECIPE).exists())) {
+                            try {
+                                Utils.writeStringFile(MainActivity.this, Utils.SINGLE_RECIPE, recipes.get(0).getRecipeJSON().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         return recipes;

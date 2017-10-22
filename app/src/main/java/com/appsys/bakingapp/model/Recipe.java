@@ -3,6 +3,10 @@ package com.appsys.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Recipe implements Parcelable {
@@ -11,6 +15,7 @@ public class Recipe implements Parcelable {
     private String mTitle;
     private ArrayList<Ingredient> mIngredients = null;
     private ArrayList<Step> mSteps = null;
+    private String mRecipeJSON = "{}";
     private Integer mServings;
     private String mImage;
 
@@ -63,6 +68,59 @@ public class Recipe implements Parcelable {
     public void setImage(String image) {
         this.mImage = image;
     }
+    
+    public void setByJSON(JSONObject jsonRecipe) throws JSONException {
+        mRecipeJSON = jsonRecipe.toString();
+
+        setId(jsonRecipe.getInt("id"));
+        setTitle(jsonRecipe.getString("name"));
+        setServings(jsonRecipe.getInt("servings"));
+        setImage(jsonRecipe.getString("image"));
+
+        JSONArray jsonIngredients = jsonRecipe.getJSONArray("ingredients");
+        int ingredientsCount = jsonIngredients.length();
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+
+        for (int j = 0; j < ingredientsCount; j++) {
+            JSONObject jsonIngredient = jsonIngredients.getJSONObject(j);
+            Ingredient ingredient = new Ingredient();
+            ingredient.setQuantity(jsonIngredient.getDouble("quantity"));
+            ingredient.setIngredient(jsonIngredient.getString("ingredient"));
+            ingredient.setMeasure(jsonIngredient.getString("measure"));
+            ingredients.add(ingredient);
+        }
+        setIngredients(ingredients);
+
+        JSONArray jsonSteps = jsonRecipe.getJSONArray("steps");
+        int stepsCount = jsonSteps.length();
+        ArrayList<Step> steps = new ArrayList<>();
+
+        for (int j = 0; j < stepsCount; j++) {
+            JSONObject jsonStep = jsonSteps.getJSONObject(j);
+            Step step = new Step();
+            step.setId(jsonStep.getInt("id"));
+            step.setDescription(jsonStep.getString("description"));
+            step.setShortDescription(jsonStep.getString("shortDescription"));
+            step.setThumbnailURL(jsonStep.getString("thumbnailURL"));
+            step.setVideoURL(jsonStep.getString("videoURL"));
+            steps.add(step);
+        }
+
+        String imageThumb = "";
+        for (int j = --stepsCount; j > 0; j--) {
+            Step s = steps.get(j);
+            if (!s.getVideoURL().isEmpty()) {
+                imageThumb = s.getVideoURL();
+            }
+            s.setThumbnailURL(imageThumb);
+        }
+        setSteps(steps);
+        setImage(imageThumb);
+    }
+
+    public String getRecipeJSON() {
+        return mRecipeJSON;
+    }
 
     private Recipe(Parcel in) {
         mId = in.readByte() == 0x00 ? null : in.readInt();
@@ -81,6 +139,7 @@ public class Recipe implements Parcelable {
         }
         mServings = in.readByte() == 0x00 ? null : in.readInt();
         mImage = in.readString();
+        mRecipeJSON = in.readString();
     }
 
     @Override
@@ -116,6 +175,7 @@ public class Recipe implements Parcelable {
             dest.writeInt(mServings);
         }
         dest.writeString(mImage);
+        dest.writeString(mRecipeJSON);
     }
 
     @SuppressWarnings("unused")

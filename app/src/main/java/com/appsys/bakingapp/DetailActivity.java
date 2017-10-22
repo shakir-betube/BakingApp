@@ -3,9 +3,11 @@ package com.appsys.bakingapp;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,7 +19,9 @@ import com.appsys.bakingapp.model.Ingredient;
 import com.appsys.bakingapp.model.Recipe;
 import com.appsys.bakingapp.model.Step;
 import com.appsys.bakingapp.widget.RecipeWidget;
+import com.appsys.utils.Utils;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -55,6 +59,8 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
             finish();
             return;
         }
+
+        setTitle(mRecipe.getTitle());
 
         if (savedInstanceState == null) {
             StepsFragment stepsFragment = StepsFragment.newInstance(mRecipe);
@@ -155,9 +161,16 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
         int id = item.getItemId();
         switch (id) {
             case R.id.add_widget:
+                try {
+                    Utils.writeStringFile(DetailActivity.this, Utils.SINGLE_RECIPE, mRecipe.getRecipeJSON());
+                } catch (IOException e) {
+                    Log.e("shakir 1", e.getMessage(), e);
+                }
                 // It is the responsibility of the configuration activity to update the app widget
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                RecipeWidget.updateAppWidget(this, appWidgetManager, RecipeWidget.APP_WIDGET_ID, mRecipe.getIngredients());
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidget.class));
+
+                RecipeWidget.updateAllWidgets(this, appWidgetManager, appWidgetIds);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
