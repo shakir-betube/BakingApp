@@ -32,6 +32,14 @@ public class StepsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static StepsFragment newInstance(Recipe recipe) {
+        StepsFragment fragment = new StepsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_RECIPE_KEY, recipe);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -61,41 +69,12 @@ public class StepsFragment extends Fragment {
         mCallback = null;
     }
 
-    public static StepsFragment newInstance(Recipe recipe) {
-        StepsFragment fragment = new StepsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_RECIPE_KEY, recipe);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(ARG_RECIPE_KEY);
         }
-//        getView().findViewById(R.id.ingredients_of_recipe).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mCallback == null)
-//                    return;
-//
-//                mCallback.onIngredientClick(mRecipe.getIngredients());
-//            }
-//        });
-//
-//        RecyclerView recyclerView = getView().findViewById(R.id.steps_of_recipe);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setAdapter(new StepsAdapter(mRecipe.getSteps(), new StepsAdapter.CallbackStepList() {
-//            @Override
-//            public void onClick(int position) {
-//                if (mCallback == null)
-//                    return;
-//
-//                mCallback.onStepClick(mRecipe.getSteps(), position);
-//            }
-//        }));
     }
 
     @Override
@@ -127,8 +106,9 @@ public class StepsFragment extends Fragment {
         return itemView;
     }
 
-    public interface StepsCallback{
+    public interface StepsCallback {
         void onIngredientClick(List<Ingredient> list);
+
         void onStepClick(List<Step> list, int position);
     }
 }

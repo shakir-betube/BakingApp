@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 while (tryNo++ < 3) {
                     try {
                         Utils u = new Utils();
-//                        JSONArray response = u.getRecipes();
-                        JSONArray response = u.getRecipes(MainActivity.this);
+                        JSONArray response = u.getRecipes();
+//                        JSONArray response = u.getRecipes(MainActivity.this);
                         int recipesCount = response.length();
                         ArrayList<Recipe> recipes = new ArrayList<>();
                         for (int i = 0; i < recipesCount; i++) {

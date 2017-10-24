@@ -105,17 +105,7 @@ public class Recipe implements Parcelable {
             step.setVideoURL(jsonStep.getString("videoURL"));
             steps.add(step);
         }
-
-        String imageThumb = "";
-        for (int j = --stepsCount; j > 0; j--) {
-            Step s = steps.get(j);
-            if (!s.getVideoURL().isEmpty()) {
-                imageThumb = s.getVideoURL();
-            }
-            s.setThumbnailURL(imageThumb);
-        }
         setSteps(steps);
-        setImage(imageThumb);
     }
 
     public String getRecipeJSON() {

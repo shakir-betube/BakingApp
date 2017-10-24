@@ -31,6 +31,7 @@ public class StepFragment extends Fragment {
     private static final String ARG_CURRENT_KEY = "current_step";
     ArrayList<Step> mStep;
     int mCurrent = 0;
+    long mPosition = 0;
     private SimpleExoPlayerView mExoPlayerView;
     private SimpleExoPlayer mExoPlayer;
 
@@ -54,6 +55,10 @@ public class StepFragment extends Fragment {
             mStep = getArguments().getParcelableArrayList(ARG_LIST_KEY);
             mCurrent = getArguments().getInt(ARG_CURRENT_KEY);
         }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
+            mPosition = savedInstanceState.getLong("currentPosition");
+        }
     }
 
     @Override
@@ -69,6 +74,10 @@ public class StepFragment extends Fragment {
             mExoPlayerView.setVisibility(View.GONE);
         } else {
             initializePlayer(Uri.parse(step.getVideoURL()));
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
+            mPosition = savedInstanceState.getLong("currentPosition");
         }
 
         return itemView;
@@ -110,8 +119,18 @@ public class StepFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onSaveInstanceState(Bundle outState) {
+        if (mExoPlayer != null) {
+            outState.putLong("currentPosition", mPosition);
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPosition = mExoPlayer.getCurrentPosition();
         releasePlayer();
     }
 }

@@ -20,10 +20,11 @@ import butterknife.ButterKnife;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
     private ArrayList<Recipe> mList;
-    public RecipeAdapter(){
+
+    public RecipeAdapter() {
     }
 
-    public void swap(ArrayList<Recipe> recipes){
+    public void swap(ArrayList<Recipe> recipes) {
         mList = recipes;
         notifyDataSetChanged();
     }
@@ -47,7 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     @Override
     public int getItemCount() {
-        return (mList==null) ? 0 : mList.size();
+        return (mList == null) ? 0 : mList.size();
     }
 
     class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -70,17 +71,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         void bind(String title, int server, String image) {
             mTitle.setText(title);
             mServing.setText(String.valueOf(server));
-            Glide.with(itemView.getContext())
-                    .asBitmap()
-                    .load(image)
-                    .into(mImage);
+            if (!image.isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .asBitmap()
+                        .load(image)
+                        .into(mImage);
+            }
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
             Recipe r = mList.get(position);
-            Intent i  = new Intent(itemView.getContext(), DetailActivity.class);
+            Intent i = new Intent(itemView.getContext(), DetailActivity.class);
             i.putExtra("recipe", r);
             itemView.getContext().startActivity(i);
         }
