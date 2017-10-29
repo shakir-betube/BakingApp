@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.appsys.bakingapp.MainActivity;
 import com.appsys.bakingapp.R;
 import com.appsys.bakingapp.model.Step;
+import com.appsys.utils.PreferenceHandler;
 import com.appsys.utils.Utils;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -75,19 +76,13 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             mStep = getArguments().getParcelableArrayList(ARG_LIST_KEY);
             mCurrent = getArguments().getInt(ARG_CURRENT_KEY);
         }
-
-        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
-            mPosition = savedInstanceState.getLong("currentPosition");
-//            mExoPlayer.seekTo(mPosition);
-        }
-//        int i =0 ;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mExoPlayer != null && mPosition > 0) {
-            mExoPlayer.seekTo(mPosition);
+        if (mExoPlayer != null) {
+            mExoPlayer.seekTo(PreferenceHandler.getTime(getActivity()));
         }
     }
 
@@ -108,9 +103,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             initializePlayer(Uri.parse(step.getVideoURL()));
         }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
-            mPosition = savedInstanceState.getLong("currentPosition");
-        }
         return itemView;
     }
 
@@ -187,15 +179,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putLong("currentPosition", mPosition);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         releasePlayer();
+        PreferenceHandler.setTime(getActivity(), mPosition);
     }
 
     @Override
@@ -224,7 +211,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
         PlaybackStateCompat playbackStateCompat = mPlaybackStateBuilder.build();
         mMediaSession.setPlaybackState(playbackStateCompat);
-//        showNotification(playbackStateCompat);
+        showNotification(playbackStateCompat);
     }
     private void showNotification(PlaybackStateCompat state) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());

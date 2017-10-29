@@ -19,6 +19,7 @@ import com.appsys.bakingapp.model.Ingredient;
 import com.appsys.bakingapp.model.Recipe;
 import com.appsys.bakingapp.model.Step;
 import com.appsys.bakingapp.widget.RecipeWidget;
+import com.appsys.utils.PreferenceHandler;
 import com.appsys.utils.Utils;
 
 import java.io.IOException;
@@ -120,6 +121,7 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
 
     @Override
     public void onBackPressed() {
+        PreferenceHandler.reset(DetailActivity.this);
         if (mPhone) {
             FragmentManager fm = getFragmentManager();
             if (fm.getBackStackEntryCount() > 1) {
@@ -184,6 +186,7 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
 
         mCurrentIndex = position;
         FragmentManager fm = getFragmentManager();
+        PreferenceHandler.reset(DetailActivity.this);
         StepFragment stepsFragment = StepFragment.newInstance(mRecipe.getSteps(), position);
         FragmentTransaction ft = fm.beginTransaction();
         if (mPhone) {
