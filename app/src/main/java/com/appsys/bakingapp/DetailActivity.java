@@ -5,8 +5,8 @@ import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,14 +29,14 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements StepsFragment.StepsCallback {
 
+    private static String STACK_RECIPE_DETAIL = "STACK_RECIPE_DETAIL";
+    private static String STACK_RECIPE_STEP_DETAIL = "STACK_RECIPE_STEP_DETAIL";
     private Recipe mRecipe;
     private Ingredient mIngredient;
     private Step mStep;
     private Toast mToast;
     private boolean mPhone = true;
     private int mCurrentIndex = -2;
-    private static String STACK_RECIPE_DETAIL="STACK_RECIPE_DETAIL";
-    private static String STACK_RECIPE_STEP_DETAIL="STACK_RECIPE_STEP_DETAIL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,32 +73,34 @@ public class DetailActivity extends AppCompatActivity implements StepsFragment.S
 
         ButterKnife.bind(this);
 
-        if (!mPhone) {
-            if (fm.getBackStackEntryCount() > 1) {
-                fm.popBackStack(STACK_RECIPE_DETAIL, 0);
-            }
-            if (mCurrentIndex < 0) {
-                IngredientsFragment ingredientsFragment = IngredientsFragment.newInstance(mRecipe.getIngredients());
-                fm.beginTransaction()
-                        .replace(R.id.detail_list_fragment, ingredientsFragment)
-                        .commit();
-            } else {
-                StepFragment stepFragment = StepFragment.newInstance(mRecipe.getSteps(), mCurrentIndex);
-                FragmentTransaction ft = fm.beginTransaction();
+        if (savedInstanceState == null) {
+            if (!mPhone) {
+                if (fm.getBackStackEntryCount() > 1) {
+                    fm.popBackStack(STACK_RECIPE_DETAIL, 0);
+                }
+                if (mCurrentIndex < 0) {
+                    IngredientsFragment ingredientsFragment = IngredientsFragment.newInstance(mRecipe.getIngredients());
+                    fm.beginTransaction()
+                            .replace(R.id.detail_list_fragment, ingredientsFragment)
+                            .commit();
+                } else {
+                    StepFragment stepFragment = StepFragment.newInstance(mRecipe.getSteps(), mCurrentIndex);
+                    FragmentTransaction ft = fm.beginTransaction();
                     ft.replace(R.id.detail_list_fragment, stepFragment);
-                ft.commit();
-            }
-        } else {
-            if (mCurrentIndex == -1) {
-                IngredientsFragment ingredientsFragment = IngredientsFragment.newInstance(mRecipe.getIngredients());
-                fm.beginTransaction()
-                        .replace(R.id.master_list_fragment, ingredientsFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
-                        .commit();
-            } else if (mCurrentIndex > -1) {
-                StepFragment stepFragment = StepFragment.newInstance(mRecipe.getSteps(), mCurrentIndex);
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.master_list_fragment, stepFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL);
-                ft.commit();
+                    ft.commit();
+                }
+            } else {
+                if (mCurrentIndex == -1) {
+                    IngredientsFragment ingredientsFragment = IngredientsFragment.newInstance(mRecipe.getIngredients());
+                    fm.beginTransaction()
+                            .replace(R.id.master_list_fragment, ingredientsFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
+                            .commit();
+                } else if (mCurrentIndex > -1) {
+                    StepFragment stepFragment = StepFragment.newInstance(mRecipe.getSteps(), mCurrentIndex);
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.master_list_fragment, stepFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL);
+                    ft.commit();
+                }
             }
         }
 
