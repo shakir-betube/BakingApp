@@ -111,7 +111,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
         mExoPlayerView = itemView.findViewById(R.id.player_view);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition")) {
             mPosition = savedInstanceState.getLong("currentPosition");
         }
         return itemView;
