@@ -70,7 +70,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
             mTitle.setText(step.getShortDescription());
             if (mImageView != null && !TextUtils.isEmpty(step.getThumbnailURL())) {
                 Glide.with(itemView.getContext())
-                    .asBitmap()
                     .load(step.getThumbnailURL())
                     .into(mImageView);
             }
