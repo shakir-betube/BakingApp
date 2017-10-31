@@ -47,14 +47,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     private static final String TAG = StepFragment.class.getSimpleName();
     private static final String ARG_LIST_KEY = "list_step";
     private static final String ARG_CURRENT_KEY = "current_step";
+    private static MediaSessionCompat mMediaSession;
     ArrayList<Step> mStep;
     int mCurrent = 0;
     long mPosition = 0;
     private SimpleExoPlayerView mExoPlayerView;
     private SimpleExoPlayer mExoPlayer;
-    private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mPlaybackStateBuilder;
     private NotificationManager mNotificationManager;
+
     public StepFragment() {
         // Required empty public constructor
     }
@@ -84,6 +85,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     @Override
     public void onResume() {
         super.onResume();
+        if (mExoPlayer == null) {
+            Step step = mStep.get(mCurrent);
+            if (step.getVideoURL().isEmpty()) {
+                mExoPlayerView.setVisibility(View.GONE);
+            } else {
+                initializePlayer(Uri.parse(step.getVideoURL()));
+            }
+        }
+
         if (mExoPlayer != null && mPosition > 0) {
             mExoPlayer.seekTo(mPosition);
         }
@@ -99,12 +109,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             textView.setText((mCurrent + 1) + ") " + step.getDescription());
         }
         mExoPlayerView = itemView.findViewById(R.id.player_view);
-
-        if (step.getVideoURL().isEmpty()) {
-            mExoPlayerView.setVisibility(View.GONE);
-        } else {
-            initializePlayer(Uri.parse(step.getVideoURL()));
-        }
 
         if (savedInstanceState != null && savedInstanceState.containsKey("currentPosition") && mExoPlayer != null) {
             mPosition = savedInstanceState.getLong("currentPosition");
@@ -132,7 +136,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                                 PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         mMediaSession.setPlaybackState(mPlaybackStateBuilder.build());
-        mMediaSession.setCallback(new MediaSessionCompat.Callback(){
+        mMediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public void onPlay() {
                 mExoPlayer.setPlayWhenReady(true);
@@ -213,23 +217,24 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
             mPlaybackStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mExoPlayer.getCurrentPosition(), 1f);
-        } else if((playbackState == ExoPlayer.STATE_READY)){
+        } else if ((playbackState == ExoPlayer.STATE_READY)) {
             mPlaybackStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
         }
         PlaybackStateCompat playbackStateCompat = mPlaybackStateBuilder.build();
         mMediaSession.setPlaybackState(playbackStateCompat);
-//        showNotification(playbackStateCompat);
+        showNotification(playbackStateCompat);
     }
+
     private void showNotification(PlaybackStateCompat state) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
 
         int icon;
         String play_pause;
-        if(state.getState() == PlaybackStateCompat.STATE_PLAYING){
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
             icon = R.drawable.exo_controls_pause;
             play_pause = "pause";
         } else {
@@ -260,7 +265,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 .addAction(playPauseAction)
                 .setStyle(new NotificationCompat.MediaStyle()
                         .setMediaSession(mMediaSession.getSessionToken())
-                        .setShowActionsInCompactView(0,1));
+                        .setShowActionsInCompactView(0, 1));
 
 
         mNotificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
@@ -277,6 +282,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     public void onPositionDiscontinuity() {
 
     }
+
     public static class MediaReceiver extends BroadcastReceiver {
 
         public MediaReceiver() {
