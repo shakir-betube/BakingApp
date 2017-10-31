@@ -2,6 +2,7 @@ package com.appsys.bakingapp.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         void bind(String title, int server, String image) {
             mTitle.setText(title);
             mServing.setText(String.valueOf(server));
-            if (!image.isEmpty()) {
+            if (!TextUtils.isEmpty(image)) {
                 Glide.with(itemView.getContext())
                         .asBitmap()
                         .load(image)

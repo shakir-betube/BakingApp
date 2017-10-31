@@ -4,14 +4,15 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.appsys.bakingapp.adapter.RecipeAdapter;
 import com.appsys.bakingapp.model.Recipe;
@@ -39,21 +40,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.recipes_list)
     RecyclerView mRecipeList;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.main_parent_view)
+    LinearLayout mMainScreen;
+
     @BindView(R.id.recipes_progress)
     ProgressBar mProgressBar;
 
-    private Toast mToast;
+    private Snackbar mSnackbar;
 
     private RecipeAdapter mRecipeAdapter;
 
     private String mErrorMessage = "";
 
     private void showMessage(String msg) {
-        if (mToast != null)
-            mToast.cancel();
+        if (mSnackbar != null)
+            mSnackbar.dismiss();
 
-        mToast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-        mToast.show();
+        mSnackbar = Snackbar.make(mMainScreen, msg, Snackbar.LENGTH_LONG);
+        mSnackbar.show();
     }
 
     @Override
@@ -62,8 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         mRecipeList.setLayoutManager(new GridLayoutManager(this, computeNoOfColumns()));
 

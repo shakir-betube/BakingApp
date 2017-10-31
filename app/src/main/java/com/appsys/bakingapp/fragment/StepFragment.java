@@ -12,6 +12,7 @@ import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +88,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         super.onResume();
         if (mExoPlayer == null) {
             Step step = mStep.get(mCurrent);
-            if (step.getVideoURL().isEmpty()) {
+            if (TextUtils.isEmpty(step.getVideoURL())) {
                 mExoPlayerView.setVisibility(View.GONE);
             } else {
                 initializePlayer(Uri.parse(step.getVideoURL()));
